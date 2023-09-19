@@ -10,17 +10,57 @@
     <div id="plotly-div"></div>
 
     <script>
-        var data = [{
-            x: [1, 2, 3, 4, 5],
-            y: [1, 6, 3, 6, 5],
-            type: 'scatter'
-        }];
+ var dataset = [
+    { Time: '2021-06-18', ComCap: 1.00, MSCI: 1.00 },
+    { Time: '2021-12-31', ComCap: 1.10, MSCI: 1.09 },
+    { Time: '2022-03-01', ComCap: 1.14, MSCI: 1.11 },
+    { Time: '2022-06-30', ComCap: 1.49, MSCI: 1.14 },
+    { Time: '2022-12-31', ComCap: 1.27, MSCI: 1.01 },
+    { Time: '2023-03-01', ComCap: 1.42, MSCI: 0.91 },
+    { Time: '2023-06-30', ComCap: 1.52, MSCI: 1.00 },
+    // ... add more data points
+];
+var times = dataset.map(entry => entry.Time);
+var comCapValues = dataset.map(entry => entry.ComCap);
+var msciValues = dataset.map(entry => entry.MSCI);
+var times = dataset.map(entry => entry.Time);
+var comCapValues = dataset.map(entry => entry.ComCap);
+var msciValues = dataset.map(entry => entry.MSCI);
 
-        var layout = {
-            title: 'Simple Interactive Graph using Plotly'
-        };
+var minY = Math.min(...comCapValues, ...msciValues);
+var maxY = Math.max(...comCapValues, ...msciValues);
 
-        Plotly.newPlot('plotly-div', data, layout);
+// Add some padding to the min and max values
+var padding = 0.05 * (maxY - minY); // 5% of the range as padding
+
+var comCapTrace = {
+    x: times,
+    y: comCapValues,
+    mode: 'lines+markers',
+    name: 'ComCap'
+};
+
+var msciTrace = {
+    x: times,
+    y: msciValues,
+    mode: 'lines+markers',
+    name: 'MSCI'
+};
+
+var layout = {
+    title: 'ComCap vs. MSCI Over Time',
+    xaxis: {
+        title: 'Time'
+    },
+    yaxis: {
+        title: 'Value',
+        range: [minY - padding, maxY + padding]
+    }
+};
+
+Plotly.newPlot('plotly-div', [comCapTrace, msciTrace], layout);
+
+
     </script>
 </body>
 </html>
